@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>ผู้พิทักษ์ดิจิทัล ป.5 — เกมผจญภัยทดสอบความรู้</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0f26">
 <meta name="description" content="เกมผจญภัย 3 มิติ ทดสอบความรู้หลังเรียน รายวิชาเทคโนโลยีเพื่อชีวิตประจำวัน 5 (40 ด่าน ตาม 40 แผนการจัดการเรียนรู้)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +17,7 @@
   --gold:#ffd451; --gold2:#ff9f1c; --cyan:#3fd7ff; --good:#33d17a; --bad:#ff4d6d; --text:#f4f7ff; --muted:#aab4d6;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;background:#0a0f26;color:var(--text);font-family:'Mitr','Sarabun',Tahoma,sans-serif}
+html,body{margin:0;height:100%;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;background:#0a0f26;color:var(--text);font-family:'Mitr','Sarabun',Tahoma,sans-serif}
 canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 button{font-family:inherit;cursor:pointer}
 .hidden{display:none!important}
@@ -24,7 +27,7 @@ button{font-family:inherit;cursor:pointer}
 .btn:active{transform:translateY(3px);box-shadow:0 2px 0 #b45d00}
 .btn.ghost{background:rgba(255,255,255,.1);color:var(--text);box-shadow:none;border:1px solid var(--line)}
 .btn.small{font-size:15px;padding:8px 14px;border-radius:11px}
-input{font-family:inherit;font-size:18px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);width:100%;outline:none}
+input{-webkit-user-select:text;user-select:text;font-family:inherit;font-size:18px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);width:100%;outline:none}
 input:focus{border-color:var(--gold)}
 /* title */
 #title .card{width:min(560px,100%);padding:28px 26px;text-align:center}
@@ -65,7 +68,8 @@ input:focus{border-color:var(--gold)}
 #hud .ttl{font-size:16px;line-height:1.3}
 #hud .obj{font-size:14px;color:#c9f3ff;margin-top:4px}
 #hud .tools{display:flex;gap:6px;pointer-events:auto}
-#hud .tools button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:#fff;font-size:20px}
+#hud .tools button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:#fff;font-size:20px;display:grid;place-items:center;padding:0}
+.fsb{display:flex;align-items:center;justify-content:center;gap:8px}
 #gems{font-size:14px;color:#9feaff;margin-top:4px}
 #prompt{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);padding:10px 18px;border-radius:999px;font-size:17px;z-index:10;animation:pulse 1.2s infinite}
 @keyframes pulse{50%{transform:translateX(-50%) scale(1.06)}}
@@ -84,7 +88,7 @@ input:focus{border-color:var(--gold)}
 .bar{height:12px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:6px}
 .bar i{display:block;height:100%;width:100%;border-radius:999px;background:linear-gradient(90deg,#33d17a,#a6f05a);transition:width .5s}
 .bar.enemy i{background:linear-gradient(90deg,#ff4d6d,#ff9f1c)}
-#ecard{top:14px;right:170px}
+#ecard{top:14px;right:222px}
 #pcard{top:14px;left:14px}
 #qpanel{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:min(900px,calc(100% - 20px));padding:16px;border-radius:22px;pointer-events:auto;border:2px solid rgba(63,215,255,.45)}
 #qnum{font-size:13px;color:var(--cyan)}
@@ -127,17 +131,57 @@ input:focus{border-color:var(--gold)}
 #joy{position:fixed;left:22px;bottom:26px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);z-index:11;touch-action:none}
 #joy i{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid rgba(255,255,255,.6)}
 #act{position:fixed;right:26px;bottom:40px;width:84px;height:84px;border-radius:50%;z-index:11;font-size:34px;border:2px solid rgba(255,255,255,.4);background:linear-gradient(180deg,var(--gold),var(--gold2));box-shadow:0 6px 18px rgba(0,0,0,.4)}
+body.nojoy #joy{display:none}
 #loading{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;background:radial-gradient(circle at 50% 40%,#1d2a66,#070a1c);font-size:18px}
 .spin{width:54px;height:54px;border-radius:50%;border:5px solid rgba(255,255,255,.15);border-top-color:var(--gold);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 @media (max-width:640px){
-  #opts{grid-template-columns:1fr}
-  .opt{min-height:48px;padding:9px 12px}
-  #qpanel{padding:12px}
-  .hpcard{min-width:0;width:calc(50% - 20px);padding:8px 10px}
-  .hpcard .nm{font-size:13px}
-  #ecard{top:64px;right:14px}#pcard{top:64px}
+  #opts{grid-template-columns:1fr;gap:6px}
+  .opt{min-height:40px;padding:7px 10px;font-size:14.5px;border-radius:12px;gap:8px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+  .opt .k{flex-basis:26px;height:26px;border-radius:8px;font-size:14px}
+  #qpanel{padding:10px 10px 12px;bottom:8px;width:calc(100% - 14px);border-radius:18px;max-height:58vh;overflow:auto;background:rgba(12,18,44,.9)}
+  #qnum{font-size:11.5px}
+  #qtext{font-size:16px;line-height:1.4;margin:2px 0 8px}
+  #feedback{font-size:14px;padding:8px 10px;margin-top:8px;gap:8px}
+  .hpcard{min-width:0;width:calc(50% - 14px);padding:6px 9px;border-radius:12px}
+  .hpcard .nm{font-size:12.5px}.hpcard .nm small{font-size:11px}
+  .bar{height:8px;margin-top:4px}
+  #ecard{top:62px;right:8px}#pcard{top:62px;left:8px}
+  #hud{left:8px;top:8px;right:8px}
+  #hud .box{padding:7px 10px;border-radius:12px}
+  #hud .stg{font-size:11px}#hud .ttl{font-size:13px}#hud .obj,#gems{font-size:12px}
+  #hud .tools{gap:4px}#hud .tools button{width:38px;height:38px;border-radius:10px;font-size:17px}
+  #dialog{padding:12px 14px 16px;bottom:8px;min-height:84px;border-width:2px;width:calc(100% - 14px)}
+  #dialog .who{font-size:14px;top:-15px}
+  #dialog .txt{font-size:15.5px;line-height:1.5;min-height:44px}
+  #prompt{font-size:14px;bottom:150px;padding:8px 14px}
+  #toast{top:auto;bottom:160px;font-size:14px;padding:9px 12px}
+  #joy{width:112px;height:112px;left:16px;bottom:20px}#joy i{width:48px;height:48px;margin:-24px 0 0 -24px}
+  #act{width:70px;height:70px;font-size:28px;right:18px;bottom:32px}
   .kv{grid-template-columns:1fr 1fr}
+}
+/* มือถือแนวนอน: ย้ายแผงคำถามไปด้านขวา ให้เห็นการต่อสู้ด้านซ้าย */
+@media (orientation:landscape) and (max-height:520px){
+  #qpanel{left:auto;right:8px;top:58px;bottom:8px;transform:none;width:min(47vw,480px);max-height:none;overflow:auto;padding:10px;border-radius:16px;background:rgba(12,18,44,.9)}
+  #opts{grid-template-columns:1fr;gap:6px}
+  .opt{min-height:36px;padding:6px 10px;font-size:14px;border-radius:11px;gap:8px}
+  .opt .k{flex-basis:24px;height:24px;border-radius:7px;font-size:13px}
+  #qnum{font-size:11px}#qtext{font-size:15px;line-height:1.38;margin:2px 0 8px}
+  #feedback{font-size:13.5px;padding:7px 9px;margin-top:6px}
+  .hpcard{min-width:0;width:200px;padding:6px 9px;border-radius:12px}
+  .hpcard .nm{font-size:12.5px}.bar{height:8px;margin-top:4px}
+  #pcard{top:8px;left:8px}#ecard{top:62px;left:8px;right:auto}
+  #hud{left:8px;top:8px;right:8px}#hud .box{padding:6px 10px;max-width:46vw}
+  #hud .stg{font-size:11px}#hud .ttl{font-size:13px}#hud .obj,#gems{font-size:11.5px}
+  #hud .tools button{width:38px;height:38px;font-size:17px}
+  #dialog{width:min(640px,calc(100% - 16px));bottom:6px;padding:10px 14px 14px;min-height:70px;border-width:2px}
+  #dialog .txt{font-size:15px;min-height:40px}#dialog .who{font-size:13.5px;top:-14px}
+  #prompt{bottom:96px;font-size:14px}
+  #toast{top:auto;bottom:100px;font-size:14px}
+  #joy{width:100px;height:100px;left:14px;bottom:14px}#joy i{width:44px;height:44px;margin:-22px 0 0 -22px}
+  #act{width:64px;height:64px;font-size:26px;right:16px;bottom:20px}
+  .screen{padding:8px}#title .card{padding:14px 18px}.logo{font-size:34px}.sub{margin-bottom:8px}
+  .modal{padding:14px}.review{max-height:24vh}.stars{font-size:36px}.score{font-size:34px}
 }
 </style>
 </head>
@@ -161,6 +205,7 @@ input:focus{border-color:var(--gold)}
     </div>
     <div style="margin-top:18px;display:grid;gap:10px">
       <button class="btn" id="bStart">เริ่มผจญภัย ▶</button>
+      <button class="btn ghost small fsb" id="bFull"></button>
       <div class="row">
         <button class="btn ghost small" id="bQual">กราฟิก: สูง</button>
         <button class="btn ghost small" id="bTTS">อ่านออกเสียง: เปิด</button>
@@ -189,7 +234,7 @@ input:focus{border-color:var(--gold)}
     <div class="sub" id="inUnit" style="margin:0"></div>
     <h2 id="inTitle"></h2>
     <div class="bossline" id="inBoss"></div>
-    <div class="meta">ภารกิจ: เอาชนะผู้ท้าประลอง 3 คน (คนละ 2 ข้อ) เปิดประตูมิติ แล้วปราบบอส (4 ข้อ)<br>รวม 10 ข้อ · ใช้เวลาประมาณ 10 นาที · เก็บเพชรความรู้ระหว่างทางได้คะแนนเพิ่ม<br><small>บังคับ: W A S D / ลูกศร หรือคลิกพื้นเพื่อเดิน · E / Space คุย · มือถือใช้จอยสติ๊ก</small></div>
+    <div class="meta">ภารกิจ: เอาชนะผู้ท้าประลอง 3 คน (คนละ 2 ข้อ) เปิดประตูมิติ แล้วปราบบอส (4 ข้อ)<br>รวม 10 ข้อ · ใช้เวลาประมาณ 10 นาที · เก็บเพชรความรู้ระหว่างทางได้คะแนนเพิ่ม<br><small>บังคับ: W A S D / ลูกศร หรือคลิกพื้นเพื่อเดิน · E / Space คุย · มือถือใช้จอยสติ๊ก<br>ลากหน้าจอเพื่อหมุนมุมมองรอบทิศ · ล้อเมาส์ / สองนิ้วถ่างเพื่อซูม · ปุ่ม ⛶ มุมขวาบนเพื่อเต็มจอ</small></div>
     <div class="row"><button class="btn ghost" id="inBack">กลับ</button><button class="btn" id="inGo">เข้าสู่ด่าน ⚔</button></div>
   </div>
 </section>
@@ -226,7 +271,7 @@ input:focus{border-color:var(--gold)}
 <!-- HUD ระหว่างเล่น -->
 <div id="hud" class="hidden">
   <div class="box glass"><div class="stg" id="hStage"></div><div class="ttl" id="hTitle"></div><div class="obj" id="hObj"></div><div id="gems"></div></div>
-  <div class="tools"><button id="tSound" title="เสียง">🔊</button><button id="tTTS" title="อ่านออกเสียง">🗣</button><button id="tExit" title="ออกจากด่าน">🏠</button></div>
+  <div class="tools"><button id="tFull" title="เต็มจอ (F)"></button><button id="tSound" title="เสียง">🔊</button><button id="tTTS" title="อ่านออกเสียง">🗣</button><button id="tExit" title="ออกจากด่าน">🏠</button></div>
 </div>
 <div id="prompt" class="glass hidden"></div>
 <div id="toast" class="glass hidden"></div>
